@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>实时新闻</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f5f5; padding: 20px; }
+    .container { max-width: 800px; margin: 0 auto; }
+    h1 { text-align: center; margin-bottom: 20px; color: #333; }
+    .refresh { text-align: center; margin-bottom: 20px; }
+    .refresh button { padding: 10px 20px; font-size: 14px; cursor: pointer; background: #007bff; color: white; border: none; border-radius: 5px; }
+    .refresh button:hover { background: #0056b3; }
+    .news-list { display: grid; gap: 15px; }
+    .news-card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    .news-card h2 { font-size: 18px; margin-bottom: 10px; }
+    .news-card h2 a { color: #333; text-decoration: none; }
+    .news-card h2 a:hover { color: #007bff; }
+    .news-card .meta { font-size: 12px; color: #666; margin-bottom: 10px; }
+    .news-card .desc { font-size: 14px; color: #555; line-height: 1.6; }
+    .loading { text-align: center; padding: 40px; color: #666; }
+    .error { text-align: center; padding: 40px; color: #dc3545; }
+    .last-update { text-align: center; font-size: 12px; color: #999; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>📰 实时新闻</h1>
+    <div class="refresh">
+      <button onclick="loadNews()">🔄 刷新</button>
+    </div>
+    <div id="news" class="news-list">
+      <div class="loading">加载中...</div>
+    </div>
+    <div class="last-update" id="lastUpdate"></div>
+  </div>
+
+  <script>
+    // 使用 RSS2JSON 服务转换 RSS 为 JSON
+    const RSS_URL = 'https://feeds.bbci.co.uk/news/world/rss.xml';
+    const API_URL = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(RSS_URL);
+
+    async function loadNews() {
+      const container = document.getElementById('news');
+      container.innerHTML = '<div class="loading">加载中...</div>';
+      
+      try {
+        const res = await fetch(API_URL);
+        const data = await res.json();
+        
+        if (data.status === 'ok') {
+          renderNews(data.items);
+          document.getElementById('lastUpdate').textContent = '最后更新：' + new Date().toLocaleTimeString('zh-CN');
+        } else {
+          throw new Error('API 返回错误');
+        }
+      } catch (err) {
+        container.innerHTML = '<div class="error">加载失败：' + err.message + '</div>';
+      }
+    }
+
+    function renderNews(items) {
+      const container = document.getElementById('news');
+      container.innerHTML = items.map(item => `
+        <div class="news-card">
+          <h2><a href="${item.link}" target="_blank">${item.title}</a></h2>
+          <div class="meta">${new Date(item.pubDate).toLocaleString('zh-CN')}</div>
+          <div class="desc">${item.description || ''}</div>
+        </div>
+      `).join('');
+    }
+
+    // 页面加载时获取新闻
+    loadNews();
+    
+    // 每 5 分钟自动刷新
+    setInterval(loadNews, 300000);
+  </script>
+</body>
+</html>
