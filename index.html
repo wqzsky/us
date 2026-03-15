@@ -180,39 +180,125 @@
       color: var(--primary);
     }
 
-    /* 时光轴 */
+    /* 时光轴优化 */
     .timeline {
       position: relative;
-      padding-left: 30px;
+      padding-left: 40px;
       margin-bottom: 24px;
     }
     .timeline::before {
       content: '';
       position: absolute;
-      left: 8px;
+      left: 14px;
       top: 0;
       bottom: 0;
-      width: 2px;
-      background: linear-gradient(180deg, var(--primary), var(--primary-light));
+      width: 3px;
+      background: linear-gradient(180deg, var(--primary), var(--primary-light), transparent);
+      border-radius: 2px;
     }
     .timeline-item {
       position: relative;
-      margin-bottom: 24px;
-      padding: 16px;
+      margin-bottom: 28px;
+      padding: 20px;
       background: white;
       border-radius: var(--radius);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      box-shadow: 0 2px 12px rgba(255,107,157,0.1);
+      transition: all 0.3s;
+      border: 1px solid rgba(255,107,157,0.1);
+    }
+    .timeline-item:hover {
+      transform: translateX(4px);
+      box-shadow: 0 4px 20px rgba(255,107,157,0.2);
+      border-color: rgba(255,107,157,0.3);
     }
     .timeline-item::before {
       content: '💕';
       position: absolute;
-      left: -38px;
-      top: 20px;
-      font-size: 16px;
+      left: -46px;
+      top: 24px;
+      font-size: 20px;
+      background: white;
+      border-radius: 50%;
+      padding: 4px;
+      box-shadow: 0 2px 8px rgba(255,107,157,0.2);
     }
-    .timeline-date { font-size: 12px; color: var(--text-light); margin-bottom: 8px; }
-    .timeline-title { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
-    .timeline-content { font-size: 14px; color: var(--text-light); line-height: 1.6; }
+    .timeline-item[data-type="food"]::before { content: '🍽️'; }
+    .timeline-item[data-type="travel"]::before { content: '✈️'; }
+    .timeline-item[data-type="daily"]::before { content: '📅'; }
+    .timeline-date {
+      font-size: 13px;
+      color: var(--primary);
+      font-weight: 600;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .timeline-date::before {
+      content: '📍';
+      font-size: 14px;
+    }
+    .timeline-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: var(--text);
+      position: relative;
+      padding-bottom: 8px;
+    }
+    .timeline-title::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 40px;
+      height: 3px;
+      background: var(--gradient-primary);
+      border-radius: 2px;
+    }
+    .timeline-content {
+      font-size: 14px;
+      color: var(--text-light);
+      line-height: 1.8;
+    }
+    .timeline-image {
+      width: 100%;
+      max-width: 400px;
+      border-radius: 12px;
+      margin: 12px 0;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    }
+    .timeline-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+    .timeline-tag {
+      padding: 4px 12px;
+      background: var(--bg-warm);
+      border-radius: 12px;
+      font-size: 12px;
+      color: var(--primary);
+      font-weight: 500;
+    }
+    .timeline-filter {
+      padding: 8px 16px;
+      border: 1px solid rgba(255,107,157,0.3);
+      border-radius: 20px;
+      background: white;
+      color: var(--text);
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .timeline-filter:hover, .timeline-filter.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(255,107,157,0.3);
+    }
 
     /* 照片墙 */
     .photo-wall {
@@ -449,7 +535,24 @@
     <!-- 时光轴 -->
     <section id="timeline" style="display:none">
       <h2 class="section-title">我们的时光轴</h2>
-      <div class="timeline" id="timeline"></div>
+      
+      <!-- 年份筛选 -->
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;justify-content:center;" id="yearFilters"></div>
+      
+      <!-- 分类筛选 -->
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;justify-content:center;">
+        <button onclick="filterTimeline('all')" class="timeline-filter active" data-type="all">全部</button>
+        <button onclick="filterTimeline('love')" class="timeline-filter" data-type="love">💕 恋爱</button>
+        <button onclick="filterTimeline('food')" class="timeline-filter" data-type="food">🍽️ 美食</button>
+        <button onclick="filterTimeline('travel')" class="timeline-filter" data-type="travel">✈️ 旅行</button>
+        <button onclick="filterTimeline('daily')" class="timeline-filter" data-type="daily">📅 日常</button>
+      </div>
+      
+      <!-- 统计卡片 -->
+      <div class="stats-grid" id="timelineStats" style="margin-bottom:24px;"></div>
+      
+      <!-- 时光轴内容 -->
+      <div class="timeline" id="timelineList"></div>
     </section>
 
     <!-- 照片墙 -->
@@ -532,7 +635,11 @@
       timeline: [
         { date: '2023-05-13', title: '第一次相遇', content: '那一天，阳光正好，你刚好出现', type: 'love' },
         { date: '2023-05-20', title: '第一次约会', content: '紧张又期待，一起吃火锅', type: 'food' },
-        { date: '2023-08-10', title: '第一次旅行', content: '迪士尼的烟花很美，你更美', type: 'travel' }
+        { date: '2023-08-10', title: '第一次旅行', content: '迪士尼的烟花很美，你更美', type: 'travel' },
+        { date: '2023-10-01', title: '国庆杭州游', content: '西湖的断桥残雪没看到，但看到了你的笑颜', type: 'travel', image: 'images/couple1.jpg' },
+        { date: '2023-12-25', title: '第一个圣诞节', content: '一起吃了大餐，交换了礼物', type: 'daily' },
+        { date: '2024-02-14', title: '第一个情人节', content: '准备了很久的惊喜，你很开心', type: 'love' },
+        { date: '2024-05-13', title: '一周年纪念', content: '一年了，我们还在彼此身边', type: 'love' }
       ],
       // 照片墙
       photos: [
@@ -571,6 +678,8 @@
       renderCountdowns();
       renderCheckins();
       updateCheckinStats();
+      renderTimeline();
+      updateTimelineStats();
       updateStats();
       startCarousel();
       document.getElementById('checkinDate').valueAsDate = new Date();
@@ -650,15 +759,93 @@
     }
 
     // 渲染时光轴
+    let currentTimelineFilter = 'all';
+    
     function renderTimeline() {
-      const timeline = document.getElementById('timeline');
-      timeline.innerHTML = CONFIG.timeline.map(t => `
-        <div class="timeline-item">
+      const container = document.getElementById('timelineList');
+      const statsContainer = document.getElementById('timelineStats');
+      const filtersContainer = document.getElementById('yearFilters');
+      
+      // 年份筛选
+      const years = [...new Set(CONFIG.timeline.map(t => t.date.split('-')[0]))].sort().reverse();
+      filtersContainer.innerHTML = years.map(y => `
+        <button onclick="filterTimelineByYear('${y}')" class="timeline-filter" data-year="${y}">${y}年</button>
+      `).join('');
+      
+      // 筛选数据
+      let filtered = CONFIG.timeline;
+      if (currentTimelineFilter !== 'all') {
+        filtered = filtered.filter(t => t.type === currentTimelineFilter);
+      }
+      
+      // 统计
+      const total = filtered.length;
+      const loveCount = filtered.filter(t => t.type === 'love').length;
+      const foodCount = filtered.filter(t => t.type === 'food').length;
+      const travelCount = filtered.filter(t => t.type === 'travel').length;
+      
+      statsContainer.innerHTML = `
+        <div class="stat-card">
+          <div class="stat-value">${total}</div>
+          <div class="stat-label">总记录</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">${loveCount}</div>
+          <div class="stat-label">💕 恋爱</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">${foodCount}</div>
+          <div class="stat-label">🍽️ 美食</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">${travelCount}</div>
+          <div class="stat-label">✈️ 旅行</div>
+        </div>
+      `;
+      
+      // 渲染列表
+      if (filtered.length === 0) {
+        container.innerHTML = '<div style="text-align:center;padding:60px;color:#718096;">暂无相关记录</div>';
+        return;
+      }
+      
+      container.innerHTML = filtered.map(t => `
+        <div class="timeline-item" data-type="${t.type}">
           <div class="timeline-date">${t.date}</div>
-          <div class="timeline-title">${t.title}</div>
-          <div class="timeline-content">${t.content}</div>
+          <div class="timeline-title">${escapeHtml(t.title)}</div>
+          ${t.image ? `<img src="${t.image}" class="timeline-image" alt="${t.title}">` : ''}
+          <div class="timeline-content">${escapeHtml(t.content)}</div>
+          <div class="timeline-tags">
+            <span class="timeline-tag">${getTypeName(t.type)}</span>
+          </div>
         </div>
       `).join('');
+    }
+    
+    function filterTimeline(type) {
+      currentTimelineFilter = type;
+      document.querySelectorAll('#timeline .timeline-filter').forEach(b => {
+        b.classList.toggle('active', b.dataset.type === type);
+      });
+      renderTimeline();
+    }
+    
+    function filterTimelineByYear(year) {
+      document.querySelectorAll('#yearFilters .timeline-filter').forEach(b => {
+        b.classList.toggle('active', b.dataset.year === year);
+      });
+      currentTimelineFilter = 'all';
+      document.querySelectorAll('[data-type]').forEach(b => b.classList.remove('active'));
+      renderTimeline();
+    }
+    
+    function getTypeName(type) {
+      const names = { love: '💕 恋爱', food: '🍽️ 美食', travel: '✈️ 旅行', daily: '📅 日常' };
+      return names[type] || type;
+    }
+    
+    function updateTimelineStats() {
+      // 已在 renderTimeline 中处理
     }
 
     // 渲染照片墙
