@@ -50,10 +50,10 @@
       --gradient-love: linear-gradient(135deg, #FF6B9D 0%, #FFA8A8 100%);
       --gradient-card: linear-gradient(180deg, rgba(255,107,157,0.08) 0%, transparent 100%);
       
-      /* 间距 */
-      --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px;
-      --space-5: 20px; --space-6: 24px; --space-8: 32px; --space-10: 40px;
-      --space-12: 48px; --space-16: 64px;
+      /* 间距 - 紧凑优化 */
+      --space-1: 4px; --space-2: 8px; --space-3: 10px; --space-4: 14px;
+      --space-5: 18px; --space-6: 20px; --space-8: 26px; --space-10: 32px;
+      --space-12: 40px; --space-16: 52px;
       
       /* 圆角 */
       --radius-sm: 10px; --radius-md: 14px; --radius-lg: 20px;
@@ -163,16 +163,16 @@
       bottom: -50px; left: -50px;
     }
 
-    /* Header */
+    /* Header - 紧凑优化 */
     header {
       background: rgba(255,255,255,0.95);
       backdrop-filter: blur(20px) saturate(180%);
-      padding: var(--space-6) var(--space-5);
+      padding: var(--space-3) var(--space-5);
       position: sticky;
       top: 0;
       z-index: 100;
       border-bottom: 1px solid rgba(255,107,157,0.1);
-      box-shadow: 0 2px 8px rgba(255,107,157,0.08);
+      box-shadow: 0 1px 4px rgba(255,107,157,0.06);
     }
 
     .header-content {
@@ -182,11 +182,11 @@
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: var(--space-4);
+      gap: var(--space-3);
     }
 
     .logo {
-      font-size: 24px;
+      font-size: 18px;
       font-weight: 600;
       background: var(--gradient-primary);
       -webkit-background-clip: text;
@@ -194,49 +194,47 @@
       background-clip: text;
       display: flex;
       align-items: center;
-      gap: var(--space-3);
-      padding: var(--space-2) var(--space-4);
-      background-color: var(--bg-warm);
+      gap: var(--space-2);
+      padding: var(--space-1_5) var(--space-3);
+      background-color: transparent;
       border-radius: var(--radius-full);
-      box-shadow: var(--shadow-subtle);
       transition: all var(--transition-smooth);
-      border: 1px solid rgba(255,255,255,0.4);
     }
-    .logo:hover { transform: translateY(-2px); box-shadow: var(--shadow-soft); }
-    .logo::before { content: '📰'; font-size: 28px; }
+    .logo:hover { opacity: 0.8; }
+    .logo::before { content: '📰'; font-size: 20px; }
 
-    /* 控件 */
+    /* 控件 - 紧凑优化 */
     .controls {
       display: flex;
       gap: var(--space-2);
       flex-wrap: wrap;
     }
     .controls button {
-      padding: var(--space-3) var(--space-5);
+      padding: var(--space-2) var(--space-3);
       border: 1px solid rgba(255,255,255,0.4);
       border-radius: var(--radius-full);
-      font-size: 13px;
+      font-size: 12px;
       font-family: inherit;
       font-weight: 500;
       cursor: pointer;
       background: var(--bg-warm);
       color: var(--text-secondary);
       transition: all var(--transition-smooth);
-      min-height: 42px;
+      min-height: 36px;
       box-shadow: var(--shadow-subtle);
     }
     .controls button:hover {
-      transform: translateY(-2px);
+      transform: translateY(-1px);
       box-shadow: var(--shadow-soft);
     }
     .controls button.primary {
       background: var(--gradient-primary);
       color: white;
       border: none;
-      box-shadow: 0 4px 14px rgba(255,107,157,0.35);
+      box-shadow: 0 2px 8px rgba(255,107,157,0.3);
     }
     .controls button.primary:hover {
-      box-shadow: 0 6px 20px rgba(255,107,157,0.45);
+      box-shadow: 0 4px 12px rgba(255,107,157,0.4);
     }
 
     /* Main */
@@ -248,68 +246,49 @@
       z-index: 1;
     }
 
-    /* 相恋计时 */
+    /* 相恋计时 - 紧凑优化 */
     .love-timer {
       background: var(--gradient-love);
       color: white;
-      padding: var(--space-5) var(--space-8);
-      border-radius: var(--radius-2xl);
-      margin-bottom: var(--space-8);
+      padding: var(--space-3) var(--space-5);
+      border-radius: var(--radius-xl);
+      margin-bottom: var(--space-6);
       box-shadow: var(--shadow-love);
       text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-    .love-timer::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-      animation: shimmer 3s linear infinite;
-    }
-    @keyframes shimmer {
-      to { transform: rotate(360deg); }
-    }
-    .love-timer-content {
-      position: relative;
-      z-index: 1;
     }
     .love-timer-label {
-      font-size: 13px;
-      opacity: 0.9;
-      margin-bottom: var(--space-2);
+      font-size: 12px;
+      opacity: 0.95;
+      margin-bottom: var(--space-1);
     }
     .love-timer-days {
-      font-size: 36px;
+      font-size: 24px;
       font-weight: 700;
-      text-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      text-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
     .love-timer-names {
-      font-size: 14px;
+      font-size: 12px;
       opacity: 0.9;
-      margin-top: var(--space-2);
+      margin-top: var(--space-1);
     }
 
-    /* 页面标题 */
+    /* 页面标题 - 紧凑优化 */
     .page-title {
       text-align: center;
-      margin-bottom: var(--space-8);
+      margin-bottom: var(--space-6);
     }
     .page-title h1 {
-      font-size: 32px;
+      font-size: 22px;
       font-weight: 700;
       background: var(--gradient-primary);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
       display: inline-block;
-      padding: var(--space-4) var(--space-8);
+      padding: var(--space-2) var(--space-5);
       background-color: var(--bg-warm);
-      border-radius: var(--radius-2xl);
-      box-shadow: var(--shadow-medium);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-subtle);
       border: 1px solid rgba(255,255,255,0.4);
     }
 
@@ -548,19 +527,19 @@
       font-weight: 500;
     }
 
-    /* 情侣卡片 */
+    /* 情侣卡片 - 紧凑优化 */
     .love-card {
       background: linear-gradient(135deg, #FFF5F7 0%, #FFF0F3 100%);
       border: 2px solid rgba(255,107,157,0.3);
       border-radius: var(--radius-lg);
-      padding: var(--space-6);
-      margin-bottom: var(--space-8);
+      padding: var(--space-4);
+      margin-bottom: var(--space-6);
       box-shadow: var(--shadow-love);
       text-align: center;
     }
     .love-card-icon {
-      font-size: 48px;
-      margin-bottom: var(--space-4);
+      font-size: 32px;
+      margin-bottom: var(--space-2);
       animation: heartbeat 1.5s ease-in-out infinite;
     }
     @keyframes heartbeat {
@@ -568,26 +547,26 @@
       50% { transform: scale(1.1); }
     }
     .love-card-title {
-      font-size: 20px;
+      font-size: 16px;
       font-weight: 600;
       color: var(--text-primary);
-      margin-bottom: var(--space-3);
+      margin-bottom: var(--space-2);
     }
     .love-card-content {
-      font-size: 14px;
+      font-size: 13px;
       color: var(--text-secondary);
-      line-height: 1.7;
-      margin-bottom: var(--space-4);
+      line-height: 1.6;
+      margin-bottom: var(--space-3);
     }
     .love-card-countdown {
       display: inline-block;
-      padding: var(--space-3) var(--space-6);
+      padding: var(--space-2) var(--space-4);
       background: var(--gradient-love);
       color: white;
       border-radius: var(--radius-full);
       font-weight: 600;
-      font-size: 14px;
-      box-shadow: 0 4px 14px rgba(255,107,157,0.35);
+      font-size: 12px;
+      box-shadow: 0 2px 8px rgba(255,107,157,0.3);
     }
 
     /* Loading */
