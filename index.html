@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="每日要闻 - 个性化新闻聚合平台，每日实时更新">
+  <meta name="description" content="每日要闻 -  personalized 新闻聚合平台">
   <meta name="theme-color" content="#EBF4F0">
   <title>📰 每日要闻</title>
   
@@ -16,13 +16,13 @@
       /* 配色系统 */
       --bg: #EBF4F0;
       --bg-warm: #F5F7FA;
-      --bg-cool: #E8EDF2;
+      --bg-love: #FFF5F7;
       --text-primary: #2D3748;
       --text-secondary: #4A5568;
       --text-muted: #718096;
       --text-light: #A0AEC0;
       
-      /* 新闻源专属配色 */
+      /* 新闻源配色 */
       --source-sina: #E61616;
       --source-163: #0080FF;
       --source-qq: #00C853;
@@ -35,18 +35,20 @@
       --cat-world: #F56565;
       --cat-sports: #ED8936;
       --cat-entertainment: #D697E8;
+      --cat-love: #FF6B9D;
       
       /* 阴影系统 */
       --shadow-subtle: -4px -4px 12px rgba(255,255,255,0.9), 4px 4px 12px rgba(165,180,200,0.35);
       --shadow-soft: -6px -6px 16px rgba(255,255,255,0.95), 6px 6px 20px rgba(165,180,200,0.4);
       --shadow-medium: -8px -8px 20px rgba(255,255,255,1), 8px 8px 28px rgba(165,180,200,0.45);
-      --shadow-float: -10px -10px 24px rgba(255,255,255,1), 10px 10px 32px rgba(165,180,200,0.5), 0 2px 8px rgba(127,156,245,0.15);
+      --shadow-float: -10px -10px 24px rgba(255,255,255,1), 10px 10px 32px rgba(165,180,200,0.5);
       --shadow-inner: inset 4px 4px 10px rgba(165,180,200,0.4), inset -4px -4px 10px rgba(255,255,255,1);
-      --shadow-pressed: inset 3px 3px 6px rgba(165,180,200,0.4), inset -3px -3px 6px rgba(255,255,255,1);
+      --shadow-love: 0 4px 16px rgba(255,107,157,0.3);
       
       /* 渐变 */
       --gradient-primary: linear-gradient(135deg, #7F9CF5 0%, #B794F4 100%);
-      --gradient-accent: linear-gradient(135deg, #D697E8 0%, #F6AD55 100%);
+      --gradient-love: linear-gradient(135deg, #FF6B9D 0%, #FFA8A8 100%);
+      --gradient-card: linear-gradient(180deg, rgba(255,107,157,0.08) 0%, transparent 100%);
       
       /* 间距 */
       --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px;
@@ -65,6 +67,13 @@
       --transition-smooth: 350ms var(--ease-out);
     }
 
+    /* 情侣模式 */
+    body.love-mode {
+      --bg: #FFF5F7;
+      --bg-warm: #FFF0F3;
+      --gradient-primary: linear-gradient(135deg, #FF6B9D 0%, #FFA8A8 100%);
+    }
+
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     html {
@@ -77,12 +86,46 @@
       font-family: var(--font-sans);
       background: 
         radial-gradient(ellipse at top left, rgba(127,156,245,0.04) 0%, transparent 50%),
-        radial-gradient(ellipse at bottom right, rgba(214,151,232,0.04) 0%, transparent 50%),
+        radial-gradient(ellipse at bottom right, rgba(255,107,157,0.04) 0%, transparent 50%),
         var(--bg);
       color: var(--text-primary);
       line-height: 1.75;
       overflow-x: hidden;
       min-height: 100vh;
+      position: relative;
+    }
+
+    /* 爱心飘落 */
+    .hearts-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 9999;
+      overflow: hidden;
+    }
+    .heart {
+      position: absolute;
+      top: -20px;
+      font-size: 14px;
+      color: #FF6B9D;
+      opacity: 0.6;
+      animation: fall linear infinite;
+      cursor: pointer;
+      pointer-events: auto;
+      text-shadow: 0 2px 4px rgba(255,107,157,0.3);
+    }
+    .heart:hover {
+      opacity: 1;
+      transform: scale(1.3);
+    }
+    @keyframes fall {
+      to {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+      }
     }
 
     /* 跳过导航 */
@@ -111,25 +154,25 @@
     }
     .bg-decoration-1 {
       width: 400px; height: 400px;
-      background: radial-gradient(circle, rgba(127,156,245,0.06) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(255,107,157,0.06) 0%, transparent 70%);
       top: -100px; right: -100px;
     }
     .bg-decoration-2 {
       width: 300px; height: 300px;
-      background: radial-gradient(circle, rgba(214,151,232,0.06) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(127,156,245,0.06) 0%, transparent 70%);
       bottom: -50px; left: -50px;
     }
 
     /* Header */
     header {
-      background: rgba(235,244,240,0.95);
+      background: rgba(255,255,255,0.95);
       backdrop-filter: blur(20px) saturate(180%);
       padding: var(--space-6) var(--space-5);
       position: sticky;
       top: 0;
       z-index: 100;
-      border-bottom: 1px solid rgba(255,255,255,0.4);
-      box-shadow: 0 1px 3px rgba(127,156,245,0.08), 0 4px 16px rgba(127,156,245,0.06);
+      border-bottom: 1px solid rgba(255,107,157,0.1);
+      box-shadow: 0 2px 8px rgba(255,107,157,0.08);
     }
 
     .header-content {
@@ -143,7 +186,7 @@
     }
 
     .logo {
-      font-size: 26px;
+      font-size: 24px;
       font-weight: 600;
       background: var(--gradient-primary);
       -webkit-background-clip: text;
@@ -185,16 +228,15 @@
     .controls button:hover {
       transform: translateY(-2px);
       box-shadow: var(--shadow-soft);
-      color: var(--text-primary);
     }
     .controls button.primary {
       background: var(--gradient-primary);
       color: white;
       border: none;
-      box-shadow: 0 4px 14px rgba(127,156,245,0.35);
+      box-shadow: 0 4px 14px rgba(255,107,157,0.35);
     }
     .controls button.primary:hover {
-      box-shadow: 0 6px 20px rgba(127,156,245,0.45);
+      box-shadow: 0 6px 20px rgba(255,107,157,0.45);
     }
 
     /* Main */
@@ -206,29 +248,58 @@
       z-index: 1;
     }
 
-    /* 热点横幅 */
-    .hot-banner {
-      background: var(--gradient-accent);
+    /* 相恋计时 */
+    .love-timer {
+      background: var(--gradient-love);
       color: white;
-      padding: var(--space-4) var(--space-6);
-      border-radius: var(--radius-xl);
+      padding: var(--space-5) var(--space-8);
+      border-radius: var(--radius-2xl);
       margin-bottom: var(--space-8);
-      box-shadow: 0 4px 16px rgba(214,151,232,0.35);
-      display: flex;
-      align-items: center;
-      gap: var(--space-3);
-      font-weight: 600;
-      font-size: 14px;
+      box-shadow: var(--shadow-love);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
     }
-    .hot-banner::before { content: '🔥'; font-size: 20px; }
+    .love-timer::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      animation: shimmer 3s linear infinite;
+    }
+    @keyframes shimmer {
+      to { transform: rotate(360deg); }
+    }
+    .love-timer-content {
+      position: relative;
+      z-index: 1;
+    }
+    .love-timer-label {
+      font-size: 13px;
+      opacity: 0.9;
+      margin-bottom: var(--space-2);
+    }
+    .love-timer-days {
+      font-size: 36px;
+      font-weight: 700;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+    .love-timer-names {
+      font-size: 14px;
+      opacity: 0.9;
+      margin-top: var(--space-2);
+    }
 
-    /* 标题 */
+    /* 页面标题 */
     .page-title {
       text-align: center;
       margin-bottom: var(--space-8);
     }
     .page-title h1 {
-      font-size: 36px;
+      font-size: 32px;
       font-weight: 700;
       background: var(--gradient-primary);
       -webkit-background-clip: text;
@@ -240,21 +311,20 @@
       border-radius: var(--radius-2xl);
       box-shadow: var(--shadow-medium);
       border: 1px solid rgba(255,255,255,0.4);
-      letter-spacing: -0.02em;
     }
 
-    /* 新闻源标签栏 */
+    /* 新闻源标签 */
     .source-tabs {
       display: flex;
       gap: var(--space-2);
-      margin-bottom: var(--space-8);
+      margin-bottom: var(--space-6);
       flex-wrap: wrap;
       justify-content: center;
       padding: var(--space-3);
       background: var(--bg-warm);
       border-radius: var(--radius-2xl);
       box-shadow: var(--shadow-inner);
-      border: 1px solid rgba(165,180,200,0.2);
+      border: 1px solid rgba(255,255,255,0.4);
     }
     .source-tab {
       padding: var(--space-2) var(--space-4);
@@ -314,13 +384,15 @@
     .category-tab:hover {
       transform: translateY(-2px);
       box-shadow: var(--shadow-soft);
-      color: var(--text-primary);
     }
     .category-tab.active {
       background: var(--gradient-primary);
       color: white;
       border: none;
-      box-shadow: 0 4px 12px rgba(127,156,245,0.3);
+      box-shadow: 0 4px 12px rgba(255,107,157,0.3);
+    }
+    .category-tab[data-category="love"].active {
+      background: var(--gradient-love);
     }
 
     /* 搜索框 */
@@ -345,7 +417,7 @@
     .search-box input:focus {
       outline: none;
       box-shadow: var(--shadow-soft);
-      border-color: rgba(127,156,245,0.3);
+      border-color: rgba(255,107,157,0.3);
     }
     .search-box::before {
       content: '🔍';
@@ -394,12 +466,12 @@
       position: absolute;
       top: 0; left: 0; right: 0;
       height: 3px;
-      background: var(--gradient-accent);
+      background: var(--gradient-love);
     }
     .news-card:hover {
       transform: translateY(-6px);
-      box-shadow: var(--shadow-float);
-      border-color: rgba(127,156,245,0.2);
+      box-shadow: var(--shadow-float), 0 0 20px rgba(255,107,157,0.15);
+      border-color: rgba(255,107,157,0.2);
     }
     .news-card img {
       width: 100%;
@@ -435,6 +507,7 @@
     .news-card .category.world { background: var(--cat-world); }
     .news-card .category.sports { background: var(--cat-sports); }
     .news-card .category.entertainment { background: var(--cat-entertainment); }
+    .news-card .category.love { background: var(--cat-love); }
     .news-card .category.default { background: var(--text-muted); }
     
     .news-card .title {
@@ -474,11 +547,48 @@
       gap: var(--space-1);
       font-weight: 500;
     }
-    .news-card .source.sina { color: var(--source-sina); }
-    .news-card .source-163 { color: var(--source-163); }
-    .news-card .source.qq { color: var(--source-qq); }
-    .news-card .source-36kr { color: var(--source-36kr); }
-    .news-card .source.hacker { color: var(--source-hacker); }
+
+    /* 情侣卡片 */
+    .love-card {
+      background: linear-gradient(135deg, #FFF5F7 0%, #FFF0F3 100%);
+      border: 2px solid rgba(255,107,157,0.3);
+      border-radius: var(--radius-lg);
+      padding: var(--space-6);
+      margin-bottom: var(--space-8);
+      box-shadow: var(--shadow-love);
+      text-align: center;
+    }
+    .love-card-icon {
+      font-size: 48px;
+      margin-bottom: var(--space-4);
+      animation: heartbeat 1.5s ease-in-out infinite;
+    }
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+    .love-card-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: var(--space-3);
+    }
+    .love-card-content {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin-bottom: var(--space-4);
+    }
+    .love-card-countdown {
+      display: inline-block;
+      padding: var(--space-3) var(--space-6);
+      background: var(--gradient-love);
+      color: white;
+      border-radius: var(--radius-full);
+      font-weight: 600;
+      font-size: 14px;
+      box-shadow: 0 4px 14px rgba(255,107,157,0.35);
+    }
 
     /* Loading */
     .loading {
@@ -512,7 +622,7 @@
       font-size: 14px;
       font-weight: 500;
       cursor: pointer;
-      box-shadow: 0 4px 14px rgba(127,156,245,0.35);
+      box-shadow: 0 4px 14px rgba(255,107,157,0.35);
     }
 
     /* Footer */
@@ -524,6 +634,25 @@
       margin-top: var(--space-16);
       background: var(--bg-warm);
       border-top: 1px solid rgba(255,255,255,0.4);
+      position: relative;
+    }
+    .love-signature {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: var(--space-4);
+      font-style: italic;
+    }
+    .love-signature::before { content: '💌 '; }
+    .love-signature::after { content: ' 💌'; }
+    .couple-names {
+      font-size: 16px;
+      font-weight: 600;
+      background: var(--gradient-love);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: var(--space-4);
+      display: inline-block;
     }
     .footer-links {
       display: flex;
@@ -538,13 +667,61 @@
     }
     .footer-links a:hover { color: var(--text-primary); }
 
+    /* 情话彩蛋弹窗 */
+    .love-popup {
+      position: fixed;
+      bottom: 100px;
+      right: 30px;
+      background: white;
+      padding: var(--space-5) var(--space-6);
+      border-radius: var(--radius-xl);
+      box-shadow: 0 8px 32px rgba(255,107,157,0.3);
+      border: 2px solid rgba(255,107,157,0.3);
+      z-index: 10000;
+      max-width: 300px;
+      animation: popup 0.5s var(--ease-out);
+      display: none;
+    }
+    .love-popup.show { display: block; }
+    @keyframes popup {
+      from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.9);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+    .love-popup-text {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      font-style: italic;
+    }
+    .love-popup-close {
+      position: absolute;
+      top: var(--space-2);
+      right: var(--space-3);
+      cursor: pointer;
+      font-size: 18px;
+      color: var(--text-muted);
+    }
+
     /* 响应式 */
     @media (max-width: 767px) {
       .header-content { flex-direction: column; text-align: center; }
       .logo { font-size: 22px; }
       .news-grid { grid-template-columns: 1fr; }
-      .page-title h1 { font-size: 28px; }
+      .page-title h1 { font-size: 26px; }
+      .love-timer-days { font-size: 28px; }
       .source-tabs, .category-tabs { overflow-x: auto; justify-content: flex-start; }
+      .love-popup {
+        left: 20px;
+        right: 20px;
+        bottom: 80px;
+        max-width: none;
+      }
     }
     @media (min-width: 768px) and (max-width: 1023px) {
       .news-grid { grid-template-columns: repeat(2, 1fr); }
@@ -565,13 +742,24 @@
 <body>
   <a href="#main-content" class="skip-link">跳到主要内容</a>
   
+  <!-- 爱心飘落 -->
+  <div class="hearts-container" id="heartsContainer"></div>
+  
+  <!-- 背景装饰 -->
   <div class="bg-decoration bg-decoration-1"></div>
   <div class="bg-decoration bg-decoration-2"></div>
+
+  <!-- 情话弹窗 -->
+  <div class="love-popup" id="lovePopup">
+    <span class="love-popup-close" onclick="closeLovePopup()">×</span>
+    <p class="love-popup-text" id="lovePopupText"></p>
+  </div>
 
   <header role="banner">
     <div class="header-content">
       <h1 class="logo">每日要闻</h1>
       <div class="controls">
+        <button onclick="toggleLoveMode()" aria-label="切换情侣模式">💕 模式</button>
         <button onclick="toggleFontSize()" aria-label="调节字体大小">🔤 字体</button>
         <button onclick="loadNews()" class="primary" aria-label="刷新新闻">🔄 刷新</button>
       </div>
@@ -579,9 +767,21 @@
   </header>
 
   <main id="main-content" role="main">
-    <!-- 热点横幅 -->
-    <div class="hot-banner" id="hotBanner">
-      <span id="hotText">加载今日热点...</span>
+    <!-- 相恋计时 -->
+    <div class="love-timer">
+      <div class="love-timer-content">
+        <div class="love-timer-label">❤️ 我们相恋已经</div>
+        <div class="love-timer-days" id="loveDays">0 天</div>
+        <div class="love-timer-names" id="loveNames">W & Q · 2026</div>
+      </div>
+    </div>
+
+    <!-- 情侣专属卡片 -->
+    <div class="love-card">
+      <div class="love-card-icon">💑</div>
+      <h2 class="love-card-title">💕 我们的小世界</h2>
+      <p class="love-card-content" id="loveMessage">世界纷纷扰扰，我只对你心动</p>
+      <div class="love-card-countdown" id="nextMeeting">下次见面：计算中...</div>
     </div>
 
     <!-- 页面标题 -->
@@ -612,6 +812,7 @@
       <button class="category-tab" data-category="world" onclick="setCategory('world')">国际</button>
       <button class="category-tab" data-category="sports" onclick="setCategory('sports')">体育</button>
       <button class="category-tab" data-category="entertainment" onclick="setCategory('entertainment')">娱乐</button>
+      <button class="category-tab" data-category="love" onclick="setCategory('love')">💕 我们的小世界</button>
     </nav>
 
     <!-- 更新时间 -->
@@ -626,17 +827,51 @@
   </main>
 
   <footer role="contentinfo">
+    <div class="couple-names" id="footerNames">W & Q · 2026</div>
+    <p class="love-signature">世界纷纷扰扰，我只对你心动</p>
     <div class="footer-links">
       <a href="#" onclick="showAbout(); return false;">关于本站</a>
       <a href="#" onclick="showFeedback(); return false;">反馈建议</a>
       <a href="https://github.com/wqzsky/news-site" target="_blank" rel="noopener">GitHub</a>
     </div>
-    <p>每 3 分钟自动刷新 · 支持离线阅读</p>
-    <p style="margin-top: var(--space-2); font-size: 12px; opacity: 0.7;">❧ 天下大事 · 尽在其中 ❧</p>
+    <p style="margin-top: var(--space-2); font-size: 12px; opacity: 0.7;">每 3 分钟自动刷新 · 支持离线阅读</p>
   </footer>
 
   <script>
-    // 配置
+    // ==================== 配置区（修改这里）====================
+    const COUPLE_CONFIG = {
+      name1: 'W',              // 你的名字缩写
+      name2: 'Q',              // 对方名字缩写
+      loveDate: '2024-02-14',  // 在一起的日期 (YYYY-MM-DD)
+      nextMeeting: '2026-03-20', // 下次见面日期
+      loveMessage: '世界纷纷扰扰，我只对你心动', // 情侣卡片消息
+      year: 2026               // 年份
+    };
+
+    // 情话彩蛋库
+    const LOVE_QUOTES = [
+      '今天的热点，都不如你热。',
+      '新闻天天换，我只喜欢你。',
+      '看遍世界头条，最想拥抱你。',
+      '你是我心动的唯一头条。',
+      '世界再大，不如你一笑。',
+      '新闻会过时，但爱不会。',
+      '你是我的独家记忆。',
+      '想和你一起看遍世界新闻。',
+      '你比所有热点都重要。',
+      '爱你，是我做过最好的事。'
+    ];
+
+    // 情侣专属内容
+    const LOVE_CONTENT = [
+      { title: '💕 第一次相遇', desc: '那一天，阳光正好，你刚好出现', category: 'love' },
+      { title: '🎬 第一次约会', desc: '紧张又期待，手心都是汗', category: 'love' },
+      { title: '✈️ 想去的地方', desc: '和你一起，哪里都是风景', category: 'love' },
+      { title: '🍽️ 想吃的餐厅', desc: '和你一起吃饭，白开水都甜', category: 'love' },
+      { title: '🎁 纪念日清单', desc: '每一个和你有关的日子都值得纪念', category: 'love' }
+    ];
+    // ==================== 配置区结束 ====================
+
     const RSS_SOURCES = {
       sina: { name: '新浪', color: '#E61616', url: 'https://rss.sina.com.cn/news/marquee/int.xml' },
       '163': { name: '网易', color: '#0080FF', url: 'https://news.163.com/special/0001386F/rss_world.xml' },
@@ -655,35 +890,107 @@
       entertainment: ['娱乐', '明星', '电影', '音乐', '演出', 'entertainment', 'movie']
     };
 
-    // 状态
     let allNews = [];
     let filteredNews = [];
     let currentSource = 'all';
     let currentCategory = 'all';
     let searchQuery = '';
     let fontSizeLevel = 0;
+    let isLoveMode = false;
 
-    // 初始化
     document.addEventListener('DOMContentLoaded', () => {
+      initLoveTimer();
+      initLoveCard();
+      initHearts();
       loadNews();
       loadSettings();
       setInterval(loadNews, 180000);
-      setRandomHotTip();
+      setInterval(updateLoveTimer, 1000);
     });
 
-    // 随机热点提示
-    function setRandomHotTip() {
-      const tips = [
-        '🔥 实时热点：全球科技巨头发布最新 AI 产品',
-        '📈 财经聚焦：股市今日开盘走高',
-        '🌍 国际快讯：多国领导人会晤达成共识',
-        '⚽ 体育速递：欧冠决赛即将上演',
-        '🎬 娱乐前沿：新片票房突破纪录'
-      ];
-      document.getElementById('hotText').textContent = tips[Math.floor(Math.random() * tips.length)];
+    // 初始化相恋计时
+    function initLoveTimer() {
+      updateLoveTimer();
+      document.getElementById('loveNames').textContent = `${COUPLE_CONFIG.name1} & ${COUPLE_CONFIG.name2} · ${COUPLE_CONFIG.year}`;
+      document.getElementById('footerNames').textContent = `${COUPLE_CONFIG.name1} & ${COUPLE_CONFIG.name2} · ${COUPLE_CONFIG.year}`;
     }
 
-    // 设置新闻源
+    // 更新相恋计时
+    function updateLoveTimer() {
+      const loveDate = new Date(COUPLE_CONFIG.loveDate);
+      const now = new Date();
+      const diff = Math.floor((now - loveDate) / (1000 * 60 * 60 * 24));
+      document.getElementById('loveDays').textContent = `${diff} 天`;
+    }
+
+    // 初始化情侣卡片
+    function initLoveCard() {
+      document.getElementById('loveMessage').textContent = COUPLE_CONFIG.loveMessage;
+      updateNextMeeting();
+    }
+
+    // 更新下次见面倒计时
+    function updateNextMeeting() {
+      const nextDate = new Date(COUPLE_CONFIG.nextMeeting);
+      const now = new Date();
+      const diff = Math.floor((nextDate - now) / (1000 * 60 * 60 * 24));
+      
+      if (diff < 0) {
+        document.getElementById('nextMeeting').textContent = '期待下次相聚 💕';
+      } else if (diff === 0) {
+        document.getElementById('nextMeeting').textContent = '就在今天！💕';
+      } else {
+        document.getElementById('nextMeeting').textContent = `下次见面：${diff} 天后 💕`;
+      }
+    }
+
+    // 初始化爱心飘落
+    function initHearts() {
+      const container = document.getElementById('heartsContainer');
+      const heartCount = 15;
+      
+      for (let i = 0; i < heartCount; i++) {
+        const heart = document.createElement('div');
+        heart.className = 'heart';
+        heart.textContent = '💕';
+        heart.style.left = Math.random() * 100 + '%';
+        heart.style.animationDuration = (Math.random() * 5 + 5) + 's';
+        heart.style.animationDelay = (Math.random() * 5) + 's';
+        heart.onclick = () => showLoveQuote();
+        container.appendChild(heart);
+      }
+    }
+
+    // 显示情话彩蛋
+    function showLoveQuote() {
+      const popup = document.getElementById('lovePopup');
+      const text = document.getElementById('lovePopupText');
+      text.textContent = LOVE_QUOTES[Math.floor(Math.random() * LOVE_QUOTES.length)];
+      popup.classList.add('show');
+      
+      setTimeout(() => {
+        popup.classList.remove('show');
+      }, 4000);
+    }
+
+    function closeLovePopup() {
+      document.getElementById('lovePopup').classList.remove('show');
+    }
+
+    // 切换情侣模式
+    function toggleLoveMode() {
+      isLoveMode = !isLoveMode;
+      document.body.classList.toggle('love-mode', isLoveMode);
+    }
+
+    // 字体大小切换
+    function toggleFontSize() {
+      fontSizeLevel = (fontSizeLevel + 1) % 3;
+      const sizes = ['14px', '16px', '18px'];
+      document.body.style.fontSize = sizes[fontSizeLevel];
+      saveSettings();
+    }
+
     function setSource(source) {
       currentSource = source;
       document.querySelectorAll('.source-tab').forEach(tab => {
@@ -693,7 +1000,6 @@
       saveSettings();
     }
 
-    // 设置分类
     function setCategory(category) {
       currentCategory = category;
       document.querySelectorAll('.category-tab').forEach(tab => {
@@ -703,40 +1009,37 @@
       saveSettings();
     }
 
-    // 搜索新闻
     function searchNews() {
       searchQuery = document.getElementById('searchInput').value.toLowerCase();
       filterNews();
     }
 
-    // 过滤新闻
     function filterNews() {
-      let result = allNews;
+      let result = currentCategory === 'love' ? [...LOVE_CONTENT] : [...allNews];
 
-      if (currentSource !== 'all') {
-        result = result.filter(n => n.source === currentSource);
-      }
-
-      if (currentCategory !== 'all') {
-        const keywords = CATEGORY_KEYWORDS[currentCategory];
-        result = result.filter(n => {
-          const text = (n.title + ' ' + (n.description || '')).toLowerCase();
-          return keywords.some(k => text.includes(k.toLowerCase()));
-        });
-      }
-
-      if (searchQuery) {
-        result = result.filter(n => 
-          n.title.toLowerCase().includes(searchQuery) ||
-          (n.description || '').toLowerCase().includes(searchQuery)
-        );
+      if (currentCategory !== 'love') {
+        if (currentSource !== 'all') {
+          result = result.filter(n => n.source === currentSource);
+        }
+        if (currentCategory !== 'all') {
+          const keywords = CATEGORY_KEYWORDS[currentCategory];
+          result = result.filter(n => {
+            const text = (n.title + ' ' + (n.description || '')).toLowerCase();
+            return keywords.some(k => text.includes(k.toLowerCase()));
+          });
+        }
+        if (searchQuery) {
+          result = result.filter(n => 
+            n.title.toLowerCase().includes(searchQuery) ||
+            (n.description || '').toLowerCase().includes(searchQuery)
+          );
+        }
       }
 
       filteredNews = result;
       renderNews();
     }
 
-    // 加载新闻
     async function loadNews() {
       const container = document.getElementById('news');
       container.innerHTML = '<div class="loading">正在加载要闻...</div>';
@@ -769,7 +1072,6 @@
       }
     }
 
-    // 渲染新闻
     function renderNews() {
       const container = document.getElementById('news');
       
@@ -777,7 +1079,7 @@
         container.innerHTML = `
           <div class="error">
             <span class="error-icon">📭</span>
-            <p>暂无相关新闻</p>
+            <p>暂无相关内容</p>
             <button onclick="resetFilters()">重置筛选</button>
           </div>
         `;
@@ -787,13 +1089,15 @@
       const fragment = document.createDocumentFragment();
       
       filteredNews.forEach(item => {
-        const category = detectCategory(item);
-        const timeAgo = getTimeAgo(new Date(item.pubDate));
-        const sourceInfo = RSS_SOURCES[item.source] || { name: item.source, color: '#999' };
+        const category = item.category || detectCategory(item);
+        const timeAgo = item.pubDate ? getTimeAgo(new Date(item.pubDate)) : '';
+        const sourceInfo = RSS_SOURCES[item.source] || { name: item.source || '未知', color: '#999' };
         
         const card = document.createElement('article');
         card.className = 'news-card';
-        card.onclick = () => window.open(item.link, '_blank');
+        card.onclick = () => {
+          if (item.link) window.open(item.link, '_blank');
+        };
         
         card.innerHTML = `
           ${item.enclosure?.link ? `<img src="${item.enclosure.link}" alt="" loading="lazy" onerror="this.style.display='none'">` : ''}
@@ -803,7 +1107,7 @@
             <p class="desc">${escapeHtml(stripHtml(item.description || '暂无摘要'))}</p>
             <div class="meta">
               <span class="source" style="color: ${sourceInfo.color}">📍 ${sourceInfo.name}</span>
-              <span class="time">🕐 ${timeAgo}</span>
+              ${timeAgo ? `<span class="time">🕐 ${timeAgo}</span>` : ''}
             </div>
           </div>
         `;
@@ -815,7 +1119,6 @@
       container.appendChild(fragment);
     }
 
-    // 重置筛选
     function resetFilters() {
       setSource('all');
       setCategory('all');
@@ -823,7 +1126,6 @@
       searchQuery = '';
     }
 
-    // 检测分类
     function detectCategory(item) {
       const text = (item.title + ' ' + (item.description || '')).toLowerCase();
       for (const [cat, keywords] of Object.entries(CATEGORY_KEYWORDS)) {
@@ -834,7 +1136,6 @@
       return '综合';
     }
 
-    // 时间格式化
     function getTimeAgo(date) {
       const diff = Math.floor((new Date() - date) / 1000);
       if (diff < 60) return '刚刚';
@@ -843,27 +1144,17 @@
       return `${Math.floor(diff / 86400)}天前`;
     }
 
-    // 更新时间
     function updateLastUpdate() {
       const now = new Date();
       const timeStr = now.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
       document.getElementById('updateTime').textContent = `最后更新：${timeStr}`;
     }
 
-    // 字体大小切换
-    function toggleFontSize() {
-      fontSizeLevel = (fontSizeLevel + 1) % 3;
-      const sizes = ['14px', '16px', '18px'];
-      document.documentElement.style.setProperty('--base-font-size', sizes[fontSizeLevel]);
-      document.body.style.fontSize = sizes[fontSizeLevel];
-      saveSettings();
-    }
-
-    // 本地存储
     function saveSettings() {
       localStorage.setItem('newsSource', currentSource);
       localStorage.setItem('newsCategory', currentCategory);
       localStorage.setItem('fontSizeLevel', fontSizeLevel);
+      localStorage.setItem('isLoveMode', isLoveMode);
     }
 
     function loadSettings() {
@@ -872,10 +1163,11 @@
       const cat = localStorage.getItem('newsCategory');
       if (cat) { currentCategory = cat; setCategory(cat); }
       const fs = localStorage.getItem('fontSizeLevel');
-      if (fs) { fontSizeLevel = parseInt(fs); toggleFontSize(); }
+      if (fs) { fontSizeLevel = parseInt(fs); document.body.style.fontSize = ['14px', '16px', '18px'][fontSizeLevel]; }
+      const lm = localStorage.getItem('isLoveMode');
+      if (lm === 'true') { isLoveMode = true; document.body.classList.add('love-mode'); }
     }
 
-    // 工具函数
     function stripHtml(html) {
       const tmp = document.createElement('div');
       tmp.innerHTML = html;
@@ -888,13 +1180,12 @@
       return div.innerHTML;
     }
 
-    // 关于/反馈
     function showAbout() {
-      alert('每日要闻\n\n一个简洁的新闻聚合平台\n支持多源聚合、分类筛选、实时搜索\n\n每 3 分钟自动刷新');
+      alert('每日要闻 · 情侣版\n\n一个充满爱意的新闻聚合平台\n\n💕 相恋计时 · 情侣频道 · 情话彩蛋\n\n每 3 分钟自动刷新');
     }
 
     function showFeedback() {
-      alert('反馈建议\n\n欢迎通过 GitHub Issues 提交反馈\nhttps://github.com/wqzsky/news-site/issues');
+      alert('反馈建议\n\n欢迎通过 GitHub Issues 提交\nhttps://github.com/wqzsky/news-site/issues');
     }
   </script>
 </body>
