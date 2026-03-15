@@ -20,33 +20,42 @@
     
     body {
       font-family: 'Noto Serif SC', serif;
-      /* 上半部分：你们的照片 */
-      background: 
-        /* 下半部分：格子图案 */
-        linear-gradient(180deg, transparent 50%, rgba(232,165,152,0.08) 50%),
-        linear-gradient(90deg, transparent 50%, rgba(232,165,152,0.08) 50%),
-        /* 上半部分：照片 */
-        linear-gradient(180deg, #FFF8F0 0%, #FFF8F0 400px),
+      /* Like_Girl 风格背景：上照片 + 下格子 */
+      background-color: #FFF8F0;
+      background-image: 
+        /* 格子图案 */
+        linear-gradient(rgba(232,165,152,0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(232,165,152,0.1) 1px, transparent 1px),
+        /* 顶部照片区域 */
+        linear-gradient(180deg, rgba(255,248,240,0.8) 0%, rgba(255,248,240,0.9) 350px, transparent 350px),
         url('images/bg.jpg');
       background-size: 
-        30px 30px,
-        30px 30px,
-        100% 400px,
+        40px 40px,
+        40px 40px,
+        100% 350px,
         cover;
       background-position: 
-        0 400px,
-        0 400px,
+        0 350px,
+        0 350px,
         0 0,
         center top;
-      background-repeat: 
-        repeat,
-        repeat,
-        no-repeat,
-        no-repeat;
       background-attachment: fixed;
       color: var(--text);
       line-height: 1.8;
       min-height: 100vh;
+    }
+    
+    /* 顶部照片遮罩 */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 350px;
+      background: linear-gradient(180deg, rgba(255,248,240,0.3) 0%, rgba(255,248,240,0.8) 100%);
+      z-index: -1;
+      pointer-events: none;
     }
 
     /* 飘落花瓣 */
@@ -366,11 +375,12 @@
   <div class="petals" id="petals"></div>
 
   <!-- 音乐播放器 -->
-  <div class="music-player" id="musicPlayer" onclick="toggleMusic()" title="播放音乐">
+  <div class="music-player" id="musicPlayer" onclick="toggleMusic()" title="点击播放音乐">
     <span class="music-player-icon">🎵</span>
   </div>
-  <audio id="bgMusic" loop>
-    <source src="https://music.163.com/song/media/outer/url?id=1860163949.mp3" type="audio/mpeg">
+  <audio id="bgMusic" loop preload="auto">
+    <source src="https://cdn.jsdelivr.net/gh/openclaw/music/romantic.mp3" type="audio/mpeg">
+    <source src="https://music.163.com/song/media/outer/url?id=520604164.mp3" type="audio/mpeg">
   </audio>
 
   <div class="container">
@@ -549,29 +559,48 @@
     function toggleMusic() {
       const music = document.getElementById('bgMusic');
       const player = document.getElementById('musicPlayer');
+      
       if (music.paused) {
-        music.play();
-        player.classList.add('playing');
-        player.setAttribute('title', '暂停音乐');
+        music.volume = 0.4;
+        music.play().then(() => {
+          player.classList.add('playing');
+          player.setAttribute('title', '暂停音乐');
+          player.style.background = 'linear-gradient(135deg, #E8A598, #D48578)';
+          player.style.color = 'white';
+        }).catch(err => {
+          alert('音乐加载失败，请刷新页面重试');
+          console.error('Music play error:', err);
+        });
       } else {
         music.pause();
         player.classList.remove('playing');
-        player.setAttribute('title', '播放音乐');
+        player.setAttribute('title', '点击播放音乐');
+        player.style.background = 'white';
+        player.style.color = 'var(--text)';
       }
     }
     
-    // 尝试自动播放（需要用户交互后才能生效）
-    document.addEventListener('click', function initMusic() {
+    // 页面加载完成后尝试播放
+    window.addEventListener('load', () => {
       const music = document.getElementById('bgMusic');
-      const player = document.getElementById('musicPlayer');
-      if (music.paused) {
-        music.volume = 0.3;
-        music.play().then(() => {
-          player.classList.add('playing');
-        }).catch(() => {});
+      music.volume = 0.4;
+      
+      // 显示播放提示
+      setTimeout(() => {
+        const player = document.getElementById('musicPlayer');
+        player.style.animation = 'pulse 2s infinite';
+      }, 1000);
+    });
+    
+    // 添加脉冲动画
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.1); }
       }
-      document.removeEventListener('click', initMusic);
-    }, { once: true });
+    `;
+    document.head.appendChild(style);
 
     // 更新计时器
     function updateTimer() {
