@@ -4,38 +4,48 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="古风资讯 - 个性化新闻聚合平台，每日实时更新">
-  <meta name="theme-color" content="#8B4513">
-  <title>📜 每日要闻 - 古风资讯</title>
+  <meta name="theme-color" content="#E0E5EC">
+  <title>📰 每日要闻 - 拟物化资讯</title>
   
   <!-- 性能优化：预加载关键资源 -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Poppins:wght@400;500;600;700&display=swap');
 
     /* ========================================
        设计系统 - UI/UX Pro Max 标准
+       拟物化 (Neumorphism) 风格
        ======================================== */
     :root {
-      /* 色彩系统 - 新中式古风 */
-      --primary: #8B4513;
-      --primary-dark: #5D2E0C;
-      --primary-light: #A0522D;
-      --accent: #C41E3A;
-      --bg: #F5E6D3;
-      --bg-dark: #E8D5C4;
-      --paper: #FFF8F0;
-      --ink: #2C2C2C;
-      --ink-light: #5A5A5A;
-      --gold: #B8860B;
-      --gold-light: #DAA520;
-      --border: #8B7355;
+      /* 拟物化配色系统 */
+      --bg: #E0E5EC;
+      --bg-dark: #D1D9E6;
+      --text-primary: #4A5568;
+      --text-secondary: #718096;
+      --text-light: #A0AEC0;
+      
+      /* 强调色 */
+      --primary: #667EEA;
+      --primary-dark: #5A67D8;
+      --accent: #F093FB;
+      --accent-secondary: #F5576C;
+      
+      /* 阴影系统 - 拟物化核心 */
+      --shadow-light: -8px -8px 16px rgba(255, 255, 255, 0.8);
+      --shadow-dark: 8px 8px 16px rgba(163, 177, 198, 0.6);
+      --shadow-inner: inset 6px 6px 12px rgba(163, 177, 198, 0.5),
+                      inset -6px -6px 12px rgba(255, 255, 255, 0.9);
+      --shadow-float: 12px 12px 24px rgba(163, 177, 198, 0.5),
+                      -12px -12px 24px rgba(255, 255, 255, 0.9);
+      --shadow-pressed: inset 4px 4px 8px rgba(163, 177, 198, 0.5),
+                        inset -4px -4px 8px rgba(255, 255, 255, 0.9);
       
       /* 语义化颜色 */
-      --success: #2E7D32;
-      --warning: #F57C00;
-      --error: #C62828;
+      --success: #48BB78;
+      --warning: #ED8936;
+      --error: #F56565;
       
       /* 间距系统 - 4px 基准 */
       --space-1: 4px;
@@ -48,25 +58,20 @@
       --space-10: 40px;
       
       /* 排版系统 */
-      --font-serif: 'Noto Serif SC', 'Songti SC', 'SimSun', serif;
-      --font-display: 'Ma Shan Zheng', cursive;
+      --font-sans: 'Poppins', 'Noto Serif SC', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-serif: 'Noto Serif SC', serif;
       
-      /* 阴影系统 */
-      --shadow-sm: 0 2px 4px rgba(0,0,0,0.08);
-      --shadow-md: 0 4px 12px rgba(0,0,0,0.12);
-      --shadow-lg: 0 8px 24px rgba(0,0,0,0.16);
-      --shadow-xl: 0 12px 40px rgba(0,0,0,0.2);
-      
-      /* 圆角系统 */
-      --radius-sm: 4px;
-      --radius-md: 8px;
-      --radius-lg: 12px;
-      --radius-xl: 16px;
+      /* 圆角系统 - 大圆角拟物化 */
+      --radius-sm: 12px;
+      --radius-md: 16px;
+      --radius-lg: 24px;
+      --radius-xl: 32px;
+      --radius-full: 9999px;
       
       /* 动效系统 */
       --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
-      --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
-      --transition-slow: 400ms cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-base: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     /* ========================================
@@ -84,19 +89,19 @@
     }
 
     body {
-      font-family: var(--font-serif);
+      font-family: var(--font-sans);
       background: var(--bg);
-      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%238B4513' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-      color: var(--ink);
-      line-height: 1.8;
+      color: var(--text-primary);
+      line-height: 1.7;
       overflow-x: hidden;
       min-height: 100vh;
     }
 
     /* 焦点可见性 - 无障碍 */
     :focus-visible {
-      outline: 3px solid var(--gold);
+      outline: 3px solid var(--primary);
       outline-offset: 2px;
+      border-radius: var(--radius-sm);
     }
 
     /* 跳过导航链接 - 无障碍 */
@@ -106,10 +111,12 @@
       left: 50%;
       transform: translateX(-50%);
       background: var(--primary);
-      color: var(--paper);
+      color: white;
       padding: var(--space-3) var(--space-5);
       z-index: 9999;
       transition: top var(--transition-fast);
+      border-radius: var(--radius-full);
+      font-weight: 600;
     }
 
     .skip-link:focus {
@@ -117,47 +124,16 @@
     }
 
     /* ========================================
-       装饰元素 - 性能优化（GPU 加速）
-       ======================================== */
-    body::before {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 100px;
-      background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10 50 Q30 30 50 50 T90 50' stroke='%238B4513' stroke-width='2' fill='none' opacity='0.1'/%3E%3C/svg%3E") repeat-x;
-      opacity: 0.3;
-      pointer-events: none;
-      z-index: 1000;
-      will-change: transform;
-      transform: translateZ(0);
-    }
-
-    .ink-blot {
-      position: fixed;
-      width: 300px;
-      height: 300px;
-      background: radial-gradient(circle, rgba(139,69,19,0.05) 0%, transparent 70%);
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 0;
-      will-change: transform;
-      transform: translateZ(0);
-    }
-
-    /* ========================================
-       Header - 牌匾风格
+       Header - 拟物化悬浮效果
        ======================================== */
     header {
-      background: linear-gradient(180deg, var(--primary) 0%, var(--primary-dark) 100%);
+      background: var(--bg);
       padding: var(--space-6) var(--space-5);
       position: sticky;
       top: 0;
       z-index: 100;
-      box-shadow: var(--shadow-lg);
-      border-bottom: 3px solid var(--gold);
-      will-change: transform;
+      box-shadow: var(--shadow-dark);
+      border-bottom: 1px solid rgba(255,255,255,0.2);
     }
 
     .header-content {
@@ -171,32 +147,37 @@
     }
 
     .logo {
-      font-family: var(--font-display);
-      font-size: 32px;
-      color: var(--paper);
+      font-family: var(--font-sans);
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--primary);
       display: flex;
       align-items: center;
       gap: var(--space-3);
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
       padding: var(--space-3) var(--space-5);
-      background: rgba(0,0,0,0.2);
-      border-radius: var(--radius-md);
-      border: 2px solid var(--gold);
-      transition: transform var(--transition-base), box-shadow var(--transition-base);
+      background: var(--bg);
+      border-radius: var(--radius-full);
+      box-shadow: var(--shadow-light), var(--shadow-dark);
+      transition: all var(--transition-base);
     }
 
     .logo:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      box-shadow: var(--shadow-float);
+    }
+
+    .logo:active {
+      transform: translateY(0);
+      box-shadow: var(--shadow-pressed);
     }
 
     .logo::before {
-      content: '📜';
-      font-size: 36px;
+      content: '📰';
+      font-size: 32px;
     }
 
     /* ========================================
-       控件 - 触摸友好优化
+       控件 - 拟物化按钮
        ======================================== */
     .controls {
       display: flex;
@@ -207,30 +188,36 @@
     .controls select,
     .controls button {
       padding: var(--space-3) var(--space-5);
-      border: 2px solid var(--gold);
-      border-radius: var(--radius-sm);
+      border: none;
+      border-radius: var(--radius-full);
       font-size: 14px;
       font-family: inherit;
-      cursor: pointer;
-      background: var(--paper);
-      color: var(--primary);
-      transition: all var(--transition-base);
       font-weight: 600;
-      min-height: 44px; /* 触摸友好 */
+      cursor: pointer;
+      background: var(--bg);
+      color: var(--text-primary);
+      transition: all var(--transition-base);
+      min-height: 44px;
       min-width: 44px;
+      box-shadow: var(--shadow-light), var(--shadow-dark);
     }
 
     .controls select:hover,
     .controls button:hover {
-      background: var(--gold);
-      color: var(--paper);
       transform: translateY(-2px);
-      box-shadow: var(--shadow-md);
+      box-shadow: var(--shadow-float);
+      color: var(--primary);
     }
 
     .controls select:active,
     .controls button:active {
       transform: translateY(0);
+      box-shadow: var(--shadow-pressed);
+    }
+
+    .controls button.primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
     }
 
     /* ========================================
@@ -244,40 +231,26 @@
       z-index: 1;
     }
 
-    /* 卷轴标题 */
+    /* 拟物化标题 */
     .scroll-title {
       text-align: center;
       margin-bottom: var(--space-8);
-      position: relative;
     }
 
     .scroll-title h2 {
-      font-family: var(--font-display);
-      font-size: 28px;
-      color: var(--primary);
+      font-family: var(--font-sans);
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--text-primary);
       display: inline-block;
-      padding: var(--space-4) var(--space-10);
-      background: var(--paper);
-      border: 3px solid var(--primary);
-      border-radius: var(--radius-sm);
-      box-shadow: var(--shadow-md);
+      padding: var(--space-5) var(--space-10);
+      background: var(--bg);
+      border-radius: var(--radius-full);
+      box-shadow: var(--shadow-light), var(--shadow-dark);
     }
-
-    .scroll-title::before,
-    .scroll-title::after {
-      content: '';
-      position: absolute;
-      top: 50%;
-      width: 100px;
-      height: 3px;
-      background: linear-gradient(90deg, var(--primary), transparent);
-    }
-
-    .scroll-title::before { left: 0; }
-    .scroll-title::after { right: 0; transform: scaleX(-1); }
 
     /* ========================================
-       Category Tabs - 书签风格
+       Category Tabs - 拟物化胶囊
        ======================================== */
     .category-tabs {
       display: flex;
@@ -286,54 +259,41 @@
       flex-wrap: wrap;
       justify-content: center;
       padding: var(--space-5);
-      background: var(--paper);
-      border: 2px solid var(--border);
-      border-radius: var(--radius-md);
-      box-shadow: var(--shadow-sm);
+      background: var(--bg);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-inner);
     }
 
     .category-tab {
       padding: var(--space-3) var(--space-6);
-      border: 2px solid var(--border);
-      border-radius: var(--radius-sm);
+      border: none;
+      border-radius: var(--radius-full);
       cursor: pointer;
       transition: all var(--transition-base);
-      background: transparent;
-      font-size: 15px;
+      background: var(--bg);
+      font-size: 14px;
       font-family: inherit;
-      color: var(--ink);
-      position: relative;
-      overflow: hidden;
+      font-weight: 600;
+      color: var(--text-secondary);
       min-height: 44px;
-    }
-
-    .category-tab::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(139,69,19,0.2), transparent);
-      transition: left var(--transition-slow);
-    }
-
-    .category-tab:hover::before {
-      left: 100%;
+      box-shadow: var(--shadow-light), var(--shadow-dark);
     }
 
     .category-tab:hover {
-      border-color: var(--primary);
-      color: var(--primary);
       transform: translateY(-2px);
-      box-shadow: var(--shadow-sm);
+      box-shadow: var(--shadow-float);
+      color: var(--primary);
+    }
+
+    .category-tab:active {
+      transform: translateY(0);
+      box-shadow: var(--shadow-pressed);
     }
 
     .category-tab.active {
-      background: var(--primary);
-      border-color: var(--primary);
-      color: var(--paper);
-      box-shadow: var(--shadow-md);
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      box-shadow: var(--shadow-dark);
     }
 
     /* ========================================
@@ -346,19 +306,19 @@
     }
 
     /* ========================================
-       News Card - 奏折风格
+       News Card - 拟物化卡片
        ======================================== */
     .news-card {
-      background: var(--paper);
-      border-radius: var(--radius-md);
+      background: var(--bg);
+      border-radius: var(--radius-lg);
       overflow: hidden;
-      box-shadow: var(--shadow-md);
+      box-shadow: var(--shadow-light), var(--shadow-dark);
       transition: all var(--transition-base);
       cursor: pointer;
-      border: 1px solid var(--border);
       position: relative;
       display: flex;
       flex-direction: column;
+      border: 1px solid rgba(255,255,255,0.1);
     }
 
     .news-card::before {
@@ -368,17 +328,21 @@
       left: 0;
       right: 0;
       height: 4px;
-      background: linear-gradient(90deg, var(--primary), var(--gold), var(--primary));
+      background: linear-gradient(90deg, var(--primary), var(--accent), var(--accent-secondary));
     }
 
     .news-card:hover {
-      transform: translateY(-8px) scale(1.01);
-      box-shadow: var(--shadow-xl);
-      border-color: var(--gold-light);
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-float);
+    }
+
+    .news-card:active {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-pressed);
     }
 
     .news-card:focus-within {
-      outline: 3px solid var(--gold);
+      outline: 3px solid var(--primary);
       outline-offset: 2px;
     }
 
@@ -387,13 +351,12 @@
       height: 200px;
       object-fit: cover;
       background: var(--bg-dark);
-      filter: sepia(20%) contrast(95%);
-      transition: filter var(--transition-base);
+      transition: all var(--transition-base);
       loading: lazy;
     }
 
     .news-card:hover img {
-      filter: sepia(0%) contrast(100%);
+      filter: brightness(1.05);
     }
 
     .news-card .content {
@@ -406,14 +369,14 @@
     .news-card .category {
       display: inline-block;
       padding: var(--space-2) var(--space-4);
-      background: var(--primary);
-      color: var(--paper);
-      border-radius: 20px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      border-radius: var(--radius-full);
       font-size: 12px;
       margin-bottom: var(--space-3);
       font-weight: 600;
-      border: 1px solid var(--gold);
       align-self: flex-start;
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
     }
 
     .news-card .title {
@@ -421,7 +384,7 @@
       font-weight: 600;
       margin-bottom: var(--space-3);
       line-height: 1.5;
-      color: var(--ink);
+      color: var(--text-primary);
       display: -webkit-box;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
@@ -431,7 +394,7 @@
 
     .news-card .desc {
       font-size: 14px;
-      color: var(--ink-light);
+      color: var(--text-secondary);
       margin-bottom: var(--space-4);
       display: -webkit-box;
       -webkit-line-clamp: 3;
@@ -446,9 +409,9 @@
       justify-content: space-between;
       align-items: center;
       font-size: 12px;
-      color: var(--ink-light);
+      color: var(--text-light);
       padding-top: var(--space-4);
-      border-top: 1px dashed var(--border);
+      border-top: 1px solid rgba(163, 177, 198, 0.3);
       flex-shrink: 0;
     }
 
@@ -460,46 +423,23 @@
       font-weight: 600;
     }
 
-    /* 角花装饰 */
-    .news-card .corner {
-      position: absolute;
-      width: 24px;
-      height: 24px;
-      border: 2px solid var(--gold);
-      opacity: 0.5;
-      pointer-events: none;
-    }
-
-    .news-card .corner-tl {
-      top: var(--space-3);
-      left: var(--space-3);
-      border-right: none;
-      border-bottom: none;
-    }
-
-    .news-card .corner-br {
-      bottom: var(--space-3);
-      right: var(--space-3);
-      border-left: none;
-      border-top: none;
-    }
-
     /* ========================================
        Loading & Error States
        ======================================== */
     .loading {
       text-align: center;
       padding: var(--space-16) var(--space-5);
-      color: var(--ink-light);
+      color: var(--text-secondary);
       font-size: 16px;
     }
 
     .loading::before {
-      content: '📜';
+      content: '📰';
       display: block;
       font-size: 48px;
       margin-bottom: var(--space-5);
       animation: rotate 3s linear infinite;
+      display: inline-block;
     }
 
     @keyframes rotate {
@@ -517,46 +457,50 @@
       margin-top: var(--space-4);
       padding: var(--space-3) var(--space-6);
       cursor: pointer;
-      background: var(--primary);
-      color: var(--paper);
+      background: var(--bg);
+      color: var(--text-primary);
       border: none;
-      border-radius: var(--radius-sm);
+      border-radius: var(--radius-full);
       font-size: 14px;
+      font-weight: 600;
       min-height: 44px;
+      box-shadow: var(--shadow-light), var(--shadow-dark);
+      transition: all var(--transition-base);
+    }
+
+    .error button:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-float);
+    }
+
+    .error button:active {
+      transform: translateY(0);
+      box-shadow: var(--shadow-pressed);
     }
 
     /* ========================================
-       Footer - 卷轴风格
+       Footer - 拟物化
        ======================================== */
     footer {
       text-align: center;
       padding: var(--space-10) var(--space-5);
-      color: var(--ink-light);
+      color: var(--text-secondary);
       font-size: 14px;
       margin-top: var(--space-16);
-      background: var(--paper);
-      border-top: 3px solid var(--gold);
-      position: relative;
-    }
-
-    footer::before {
-      content: '❧';
-      display: block;
-      font-size: 24px;
-      color: var(--gold);
-      margin-bottom: var(--space-3);
+      background: var(--bg);
+      border-top: 1px solid rgba(255,255,255,0.2);
+      box-shadow: var(--shadow-light);
     }
 
     .seal {
       display: inline-block;
       padding: var(--space-2) var(--space-4);
-      background: var(--accent);
-      color: var(--paper);
-      border-radius: var(--radius-sm);
+      background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+      color: white;
+      border-radius: var(--radius-full);
       font-size: 12px;
       font-weight: bold;
-      border: 2px solid var(--accent);
-      box-shadow: var(--shadow-sm);
+      box-shadow: 0 4px 12px rgba(245, 87, 108, 0.4);
     }
 
     /* ========================================
@@ -590,12 +534,7 @@
 
       .scroll-title h2 {
         font-size: 24px;
-        padding: var(--space-3) var(--space-6);
-      }
-
-      .scroll-title::before,
-      .scroll-title::after {
-        width: 50px;
+        padding: var(--space-4) var(--space-6);
       }
     }
 
@@ -633,7 +572,7 @@
       .news-card {
         break-inside: avoid;
         box-shadow: none;
-        border: 1px solid #000;
+        border: 1px solid #ccc;
       }
     }
   </style>
@@ -641,10 +580,6 @@
 <body>
   <!-- 无障碍：跳过导航 -->
   <a href="#main-content" class="skip-link">跳到主要内容</a>
-
-  <!-- 装饰元素 -->
-  <div class="ink-blot" style="top: 10%; left: 5%;"></div>
-  <div class="ink-blot" style="bottom: 20%; right: 10%;"></div>
 
   <!-- 语义化 Header -->
   <header role="banner">
@@ -660,7 +595,7 @@
           <option value="36kr">🟡 36Kr</option>
           <option value="hacker">💻 Hacker News</option>
         </select>
-        <button onclick="loadNews()" aria-label="刷新新闻">🔄 刷新</button>
+        <button onclick="loadNews()" class="primary" aria-label="刷新新闻">🔄 刷新</button>
       </div>
     </div>
   </header>
@@ -668,7 +603,7 @@
   <!-- 语义化 Main -->
   <main id="main-content" role="main">
     <section class="scroll-title" aria-labelledby="section-title">
-      <h2 id="section-title">📜 今日头条</h2>
+      <h2 id="section-title">📰 今日头条</h2>
     </section>
 
     <!-- 分类导航 -->
@@ -843,8 +778,6 @@
         };
         
         card.innerHTML = `
-          <div class="corner corner-tl"></div>
-          <div class="corner corner-br"></div>
           ${item.enclosure?.link ? `<img src="${item.enclosure.link}" alt="" loading="lazy" onerror="this.style.display='none'">` : ''}
           <div class="content">
             <span class="category">${category}</span>
