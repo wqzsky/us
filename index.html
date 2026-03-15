@@ -347,6 +347,7 @@
         <button onclick="showSection('timeline')">时光轴</button>
         <button onclick="showSection('photos')">照片墙</button>
         <button onclick="showSection('wishlist')">心愿</button>
+      <button onclick="showSection('checkin')" style="background:var(--primary);color:white;">✅ 打卡</button>
       <button onclick="openUploadPanel()" style="background:var(--primary);color:white;">📤 上传</button>
       </div>
     </div>
@@ -452,6 +453,34 @@
       <h2 class="section-title">心愿清单</h2>
       <div id="wishlist"></div>
     </section>
+
+    <!-- 打卡 -->
+    <section id="checkin" style="display:none">
+      <h2 class="section-title">打卡记录</h2>
+      
+      <!-- 打卡表单 -->
+      <div style="background:white;padding:20px;border-radius:16px;margin-bottom:24px;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+        <h3 style="margin-bottom:16px;font-size:16px;">📝 新增打卡</h3>
+        <div style="display:grid;gap:12px;">
+          <select id="checkinType" style="padding:12px;border:1px solid #e2e8f0;border-radius:8px;font-size:14px;">
+            <option value="food">🍽️ 美食打卡</option>
+            <option value="travel">✈️ 旅行打卡</option>
+            <option value="date">💕 约会打卡</option>
+            <option value="daily">📅 日常打卡</option>
+          </select>
+          <input type="text" id="checkinTitle" placeholder="标题（如：一起吃什么/去哪里）" style="padding:12px;border:1px solid #e2e8f0;border-radius:8px;font-size:14px;">
+          <input type="date" id="checkinDate" style="padding:12px;border:1px solid #e2e8f0;border-radius:8px;font-size:14px;">
+          <input type="text" id="checkinNote" placeholder="备注（可选）" style="padding:12px;border:1px solid #e2e8f0;border-radius:8px;font-size:14px;">
+          <button onclick="addCheckin()" style="padding:12px;background:var(--primary);color:white;border:none;border-radius:8px;font-size:14px;cursor:pointer;font-weight:600;">✅ 提交打卡</button>
+        </div>
+      </div>
+
+      <!-- 打卡统计 -->
+      <div class="stats-grid" id="checkinStats" style="margin-bottom:24px;"></div>
+
+      <!-- 打卡时间线 -->
+      <div class="timeline" id="checkinTimeline"></div>
+    </section>
   </main>
 
   <footer>
@@ -476,13 +505,13 @@
       ],
       // 美食数据
       foods: [
-        { name: '海底捞火锅', date: '2023-05-20', price: '150/人', tags: ['火锅', '聚餐'], img: 'https://picsum.photos/400/300?food=1' },
+        { name: '海底捞火锅', date: '2023-05-20', price: '150/人', tags: ['火锅', '聚餐'], img: 'images/couple1.jpg' },
         { name: '星巴克咖啡', date: '2023-06-01', price: '50/人', tags: ['咖啡', '下午茶'], img: 'https://picsum.photos/400/300?food=2' },
         { name: '日料寿司', date: '2023-07-15', price: '200/人', tags: ['日料', '约会'], img: 'https://picsum.photos/400/300?food=3' }
       ],
       // 旅行数据
       travels: [
-        { name: '上海迪士尼', date: '2023-08-10', days: 2, tags: ['主题乐园', '浪漫'], img: 'https://picsum.photos/400/300?travel=1' },
+        { name: '上海迪士尼', date: '2023-08-10', days: 2, tags: ['主题乐园', '浪漫'], img: 'images/couple1.jpg' },
         { name: '杭州西湖', date: '2023-10-01', days: 3, tags: ['自然风光', '徒步'], img: 'https://picsum.photos/400/300?travel=2' }
       ],
       // 时光轴
@@ -490,6 +519,13 @@
         { date: '2023-05-13', title: '第一次相遇', content: '那一天，阳光正好，你刚好出现', type: 'love' },
         { date: '2023-05-20', title: '第一次约会', content: '紧张又期待，一起吃火锅', type: 'food' },
         { date: '2023-08-10', title: '第一次旅行', content: '迪士尼的烟花很美，你更美', type: 'travel' }
+      ],
+      // 照片墙
+      photos: [
+        { img: 'images/couple1.jpg', caption: '我们的第一张合照' },
+        { img: 'https://picsum.photos/300/400?random=1', caption: '美好时光' },
+        { img: 'https://picsum.photos/300/250?random=2', caption: '一起吃饭' },
+        { img: 'https://picsum.photos/300/350?random=3', caption: '旅行回忆' }
       ],
       // 心愿清单
       wishlist: [
@@ -503,7 +539,9 @@
         { name: '在一起纪念日', date: '05-13' },
         { name: '情人节', date: '02-14' },
         { name: '圣诞节', date: '12-25' }
-      ]
+      ],
+      // 打卡记录（从 localStorage 读取或初始化）
+      checkins: JSON.parse(localStorage.getItem('checkins') || '[]')
     };
 
     // ========== 初始化 ==========
@@ -517,8 +555,11 @@
       renderPhotos();
       renderWishlist();
       renderCountdowns();
+      renderCheckins();
+      updateCheckinStats();
       updateStats();
       startCarousel();
+      document.getElementById('checkinDate').valueAsDate = new Date();
       document.querySelector('.footer-signature').innerHTML = '💌 世界纷纷扰扰，我只对你心动 💌';
       document.querySelector('footer p:last-child').innerHTML = `记录我们的美食与旅行 · ${CONFIG.year}`;
     });
@@ -609,12 +650,13 @@
     // 渲染照片墙
     function renderPhotos() {
       const wall = document.getElementById('photoWall');
-      const photos = [...Array(12)].map((_,i) => `
+      const photos = (CONFIG.photos || [...Array(12)].map((_,i) => ({ img: `https://picsum.photos/300/${200+Math.random()*100}?random=${i}`, caption: '美好时光' })));
+      wall.innerHTML = photos.map(p => `
         <div class="photo-item">
-          <img src="https://picsum.photos/300/${200+Math.random()*100}?random=${i}" alt="照片">
+          <img src="${p.img}" alt="${p.caption||'照片'}">
+          ${p.caption ? `<div style="font-size:12px;padding:8px;color:#718096;text-align:center;">${p.caption}</div>` : ''}
         </div>
       `).join('');
-      wall.innerHTML = photos;
     }
 
     // 渲染心愿
@@ -719,6 +761,90 @@
           <img src="${img}" style="width:100%;border-radius:8px;aspect-ratio:1;object-fit:cover;">
         </div>
       `).join('');
+    }
+
+    // 打卡功能
+    function addCheckin() {
+      const type = document.getElementById('checkinType').value;
+      const title = document.getElementById('checkinTitle').value.trim();
+      const date = document.getElementById('checkinDate').value;
+      const note = document.getElementById('checkinNote').value.trim();
+
+      if (!title || !date) {
+        alert('请填写标题和日期');
+        return;
+      }
+
+      const checkin = {
+        id: Date.now(),
+        type,
+        title,
+        date,
+        note,
+        createdAt: new Date().toISOString()
+      };
+
+      CONFIG.checkins.unshift(checkin);
+      localStorage.setItem('checkins', JSON.stringify(CONFIG.checkins));
+      
+      // 清空表单
+      document.getElementById('checkinTitle').value = '';
+      document.getElementById('checkinNote').value = '';
+      
+      renderCheckins();
+      updateCheckinStats();
+      alert('✅ 打卡成功！');
+    }
+
+    function renderCheckins() {
+      const timeline = document.getElementById('checkinTimeline');
+      if (!CONFIG.checkins || CONFIG.checkins.length === 0) {
+        timeline.innerHTML = '<div style="text-align:center;padding:40px;color:#718096;">还没有打卡记录，快来记录你们的第一个美好时刻吧！💕</div>';
+        return;
+      }
+
+      const typeIcons = { food: '🍽️', travel: '✈️', date: '💕', daily: '📅' };
+      const typeNames = { food: '美食', travel: '旅行', date: '约会', daily: '日常' };
+
+      timeline.innerHTML = CONFIG.checkins.map(c => `
+        <div class="timeline-item">
+          <div class="timeline-date">${typeIcons[c.type] || '📅'} ${typeNames[c.type] || '打卡'} · ${c.date}</div>
+          <div class="timeline-title">${escapeHtml(c.title)}</div>
+          ${c.note ? `<div class="timeline-content">${escapeHtml(c.note)}</div>` : ''}
+        </div>
+      `).join('');
+    }
+
+    function updateCheckinStats() {
+      const stats = document.getElementById('checkinStats');
+      if (!CONFIG.checkins || CONFIG.checkins.length === 0) {
+        stats.innerHTML = '';
+        return;
+      }
+
+      const total = CONFIG.checkins.length;
+      const foodCount = CONFIG.checkins.filter(c => c.type === 'food').length;
+      const travelCount = CONFIG.checkins.filter(c => c.type === 'travel').length;
+      const dateCount = CONFIG.checkins.filter(c => c.type === 'date').length;
+
+      stats.innerHTML = `
+        <div class="stat-card">
+          <div class="stat-value">${total}</div>
+          <div class="stat-label">总打卡次数</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">${foodCount}</div>
+          <div class="stat-label">美食打卡</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">${travelCount}</div>
+          <div class="stat-label">旅行打卡</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">${dateCount}</div>
+          <div class="stat-label">约会打卡</div>
+        </div>
+      `;
     }
   </script>
 </body>
