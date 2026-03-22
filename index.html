@@ -461,14 +461,14 @@
     </nav>
 
     <!-- 点点滴滴页面 -->
-    <section id="little" class="page-section">
+    <section id="little" class="page-section" onclick="handleSectionClick(event)">
       <a class="back-btn" onclick="showHome()">← 返回首页</a>
       <h2 style="text-align:center;margin-bottom:30px;font-weight:400;letter-spacing:3px;">点点滴滴</h2>
       <div id="littleList"></div>
     </section>
 
     <!-- 留言板页面 -->
-    <section id="leaving" class="page-section">
+    <section id="leaving" class="page-section" onclick="handleSectionClick(event)">
       <a class="back-btn" onclick="showHome()">← 返回首页</a>
       <h2 style="text-align:center;margin-bottom:30px;font-weight:400;letter-spacing:3px;">留言板</h2>
       <div class="form-group">
@@ -482,21 +482,21 @@
     </section>
 
     <!-- 关于我们页面 -->
-    <section id="about" class="page-section">
+    <section id="about" class="page-section" onclick="handleSectionClick(event)">
       <a class="back-btn" onclick="showHome()">← 返回首页</a>
       <h2 style="text-align:center;margin-bottom:30px;font-weight:400;letter-spacing:3px;">关于我们</h2>
       <div id="aboutContent"></div>
     </section>
 
     <!-- 恋爱相册页面 -->
-    <section id="loveImg" class="page-section">
+    <section id="loveImg" class="page-section" onclick="handleSectionClick(event)">
       <a class="back-btn" onclick="showHome()">← 返回首页</a>
       <h2 style="text-align:center;margin-bottom:30px;font-weight:400;letter-spacing:3px;">Love Photo</h2>
       <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;" id="photoGrid"></div>
     </section>
 
     <!-- 恋爱列表页面 -->
-    <section id="list" class="page-section">
+    <section id="list" class="page-section" onclick="handleSectionClick(event)">
       <a class="back-btn" onclick="showHome()">← 返回首页</a>
       <h2 style="text-align:center;margin-bottom:30px;font-weight:400;letter-spacing:3px;">Love List</h2>
       <div class="form-group">
@@ -666,6 +666,29 @@
       // 滚动到顶部
       window.scrollTo(0, 0);
     }
+    
+    // 返回上一页（从哪个卡片进来就回到哪个位置）
+    function backToNav() {
+      showHome();
+    }
+    
+    // 点击空白区域返回（点击非表单元素时）
+    function handleSectionClick(event) {
+      // 如果点击的是空白区域（不是按钮、输入框、卡片等），返回首页
+      if (event.target === event.currentTarget) {
+        showHome();
+      }
+    }
+    
+    // 添加键盘 ESC 返回支持
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        const activeSection = document.querySelector('.page-section.active');
+        if (activeSection) {
+          showHome();
+        }
+      }
+    });
 
     // 渲染点点滴滴
     function renderMoments() {
